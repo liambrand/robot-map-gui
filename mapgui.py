@@ -3,7 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-class MyFirstGUI:
+class MapGUI:
     def __init__(self, master):
         self.master = master
         master.title("Map GUI")
@@ -21,11 +21,12 @@ class MyFirstGUI:
         #self.mapCanvas = Canvas(master, width = 800, height = 1000)
         #self.mapCanvas.pack()
 
+
     def drawMap(self):
         toDraw = self.getMap()
         centerCanvas = [400, 500]        
 
-        #self.mapCanvas.create_line(centerCanvas[0], centerCanvas[1], 100, 200)
+
         for x in toDraw:
           self.mapCanvas.create_line(centerCanvas[0] + x[0], centerCanvas[1] + x[1], 100, 100)
 
@@ -33,15 +34,16 @@ class MyFirstGUI:
         #self.w.create_line(0, 100, 200, 0, fill="red", dash=(4, 4))
         #self.w.create_rectangle(50, 25, 150, 75, fill="blue")
         
+
+    # Get map angles and distances from serial
     def getMap(self):
-        #print("Map Imported")
         measurements = [ [0, 100],
                       [90, 100],
                       [180, 100],
                       [270, 100]]
-        print(measurements)
         return measurements
 
+    # Draw map on plot
     def showMap(self):
 
         measurements = self.getMap()
@@ -54,27 +56,17 @@ class MyFirstGUI:
         for coord in coords:
           plt.plot(coord[0], coord[1], 'ro-')
 
-
         plt.show()
 
+
+    # Convert angles and measurements into a plot coordinate
     def getCoords(self, measurement):
         x = measurement[1] * math.cos(math.radians(measurement[0]))
         y = measurement[1] * math.sin(math.radians(measurement[0]))
         return x, y
-        
 
-
-
-    def getXCoord(i):
-
-        return i
-
-
-    def getYCoord(i):
-
-        return i
 
 
 root = Tk()
-my_gui = MyFirstGUI(root)
+my_gui = MapGUI(root)
 root.mainloop()
