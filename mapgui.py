@@ -45,7 +45,7 @@ class MyFirstGUI:
     def showMap(self):
 
         measurements = self.getMap()
-        coords = self.getMap()
+        coords = []
 
         for measurement in measurements:
           x, y = self.getCoords(measurement)
@@ -58,8 +58,8 @@ class MyFirstGUI:
         plt.show()
 
     def getCoords(self, measurement):
-        x = measurement[0]
-        y = measurement[1]
+        x = measurement[1] * math.cos(math.radians(measurement[0]))
+        y = measurement[1] * math.sin(math.radians(measurement[0]))
         return x, y
         
 
