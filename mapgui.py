@@ -4,51 +4,51 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class MapGUI:
+    # Initialization
     def __init__(self, master):
         self.master = master
         master.title("Map GUI")
         master.geometry("150x150")
 
+        #Buttons
         self.import_map_button = Button(master, text="Import Map", command = self.showMap)
         self.import_map_button.pack()
+
+        self.read_text_button = Button(master, text="Read File", command = self.readData)
+        self.read_text_button.pack()
 
         self.close_button = Button(master, text="Close", command = master.quit)
         self.close_button.pack()
 
+    # Retrieve distance-angle pairs from a text file
+    def readData(self):
+        try:
+          with open("coordinates.txt") as textFile:
+            lines = [line.split() for line in textFile]
+            # Values are read in as strings, so we convert them to ints
+            for i in lines:
+              i[0] = int(i[0])
+              i[1] = int(i[1])
+            return lines
 
-    def drawMap(self):
-        toDraw = self.getMap()
-        centerCanvas = [400, 500]        
+        except IOError:
+          print("Error reading file!")        
 
-        for x in toDraw:
-          self.mapCanvas.create_line(centerCanvas[0] + x[0], centerCanvas[1] + x[1], 100, 100)
-        
 
-    # Get map angles and distances from serial
-    def getMap(self):
-        measurements = [[0, 100],
-                      [90, 100],
-                      [180, 100],
-                      [270, 100],
-                      [360, 100]]
-        return measurements
 
     # Draw map on plot
     def showMap(self):
-
-        measurements = self.getMap()
+        measurements = self.readData()
+        print(measurements)
         coords = []
         x = []
         y = []
 
+        # Turn distance-angle pairs into usable coordinates
         for measurement in measurements:
-         # x, y = self.getCoords(measurement)
-         # coords.append([x, y])
           x.append(self.getXCoord(measurement))
           y.append(self.getYCoord(measurement))
 
-        #for coord in coords:
-        #  plt.plot([coord[0], 100], [coord[1], 150], 'ro-')
         plt.plot(x, y)
         plt.show()
 
