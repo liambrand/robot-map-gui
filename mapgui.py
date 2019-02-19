@@ -1,4 +1,5 @@
 from tkinter import Tk, Label, Button, Canvas
+import glob
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,13 +40,20 @@ class MapGUI:
 
     def readBinary(self):
       chunkSize = 8
-      try:
-        with open("binarycoord.bin", "rb") as f:
+
+      for file in glob.glob("./binarycoords/*.bin"):
+        with open(file, "rb") as f:
           chunk = f.read(chunkSize)
-          print(chunk)
           print(int(chunk, 2))
-      except IOError:
-          print("Error reading file!")
+      #for file in os.listdir("./binarycoords"):
+        #try:
+        #with open(file, "rb") as f:
+          #print(f.read())
+        #    chunk = file.read(chunkSize)
+        #    print(chunk)
+        #    print(int(chunk, 2))
+        #except IOError:
+        #  print("Error reading file!")
           
 
     # Draw map on plot
