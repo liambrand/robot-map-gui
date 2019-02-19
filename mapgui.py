@@ -1,4 +1,5 @@
 from tkinter import Tk, Label, Button, Canvas
+import bitarray
 import glob
 import math
 import numpy as np
@@ -40,20 +41,29 @@ class MapGUI:
 
     def readBinary(self):
       chunkSize = 8
-
+      # For all files...
       for file in glob.glob("./binarycoords/*.bin"):
         with open(file, "rb") as f:
-          chunk = f.read(chunkSize)
-          print(int(chunk, 2))
-      #for file in os.listdir("./binarycoords"):
-        #try:
-        #with open(file, "rb") as f:
-          #print(f.read())
-        #    chunk = file.read(chunkSize)
-        #    print(chunk)
-        #    print(int(chunk, 2))
-        #except IOError:
-        #  print("Error reading file!")
+          # Read in the bits according to the LIDAR response structure
+          quality = f.read(6)
+          inverseStart = f.read(1)
+          start = f.read(1)
+          angle_first = f.read(7)
+          checkbit = f.read(1)
+          angle_second = f.read(8)
+          distance = f.read(16)
+
+          # Append the angle_q6 bits
+          angle = (b"".join([angle_first, angle_second]))
+
+          # Turn binary into decimal
+          # 'Actual heading = angle_q6/64.0 Degree'
+          angle = (int(angle, 2) / 64.0)
+          # 'Actual Distance = distance_q2/4.0 mm'
+          distance = (int(distance, 2) / 4.0)
+
+          print(f'''Angle: {angle} \n
+                  Distance: {distance}''')
           
 
     # Draw map on plot
