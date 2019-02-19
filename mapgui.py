@@ -14,8 +14,11 @@ class MapGUI:
         self.import_map_button = Button(master, text="Import Map", command = self.showMap)
         self.import_map_button.pack()
 
-        self.read_text_button = Button(master, text="Read File", command = self.readData)
-        self.read_text_button.pack()
+        #self.read_text_button = Button(master, text="Read File", command = self.readData)
+        #self.read_text_button.pack()
+        
+        self.read_binary_button = Button(master, text="Read Binary", command = self.readBinary)
+        self.read_binary_button.pack()
 
         self.close_button = Button(master, text="Close", command = master.quit)
         self.close_button.pack()
@@ -34,7 +37,16 @@ class MapGUI:
         except IOError:
           print("Error reading file!")        
 
-
+    def readBinary(self):
+      chunkSize = 8
+      try:
+        with open("binarycoord.bin", "rb") as f:
+          chunk = f.read(chunkSize)
+          print(chunk)
+          print(int(chunk, 2))
+      except IOError:
+          print("Error reading file!")
+          
 
     # Draw map on plot
     def showMap(self):
@@ -49,7 +61,7 @@ class MapGUI:
           x.append(self.getXCoord(measurement))
           y.append(self.getYCoord(measurement))
 
-        plt.plot(x, y)
+        plt.scatter(x, y)
         plt.show()
 
 
