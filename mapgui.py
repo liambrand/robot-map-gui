@@ -16,8 +16,8 @@ class MapGUI:
         self.import_map_button = Button(master, text="Import Map", command = self.showMap)
         self.import_map_button.pack()
 
-        #self.read_text_button = Button(master, text="Read File", command = self.readData)
-        #self.read_text_button.pack()
+        self.read_text_button = Button(master, text="Read File", command = self.readData)
+        self.read_text_button.pack()
         
         self.read_binary_button = Button(master, text="Read Binary", command = self.readBinary)
         self.read_binary_button.pack()
@@ -34,13 +34,14 @@ class MapGUI:
             for i in lines:
               i[0] = int(i[0])
               i[1] = int(i[1])
+            print(lines)
             return lines
 
         except IOError:
           print("Error reading file!")        
 
     def readBinary(self):
-      chunkSize = 8
+      coords = []
       # For all files...
       for file in glob.glob("./binarycoords/*.bin"):
         with open(file, "rb") as f:
@@ -60,15 +61,23 @@ class MapGUI:
           # 'Actual heading = angle_q6/64.0 Degree'
           angle = (int(angle, 2) / 64.0)
           # 'Actual Distance = distance_q2/4.0 mm'
-          distance = (int(distance, 2) / 4.0)
-
-          print(f'''Angle: {angle} \n
+          distance = (int(distance, 2) / 4.0)/100
+          
+          print(f'''{f} Angle: {angle} \n
                   Distance: {distance}''')
+
+          coord = [angle, distance]
+          coords.append(coord)
+      print(coords)
+      return coords
+
+          
           
 
     # Draw map on plot
     def showMap(self):
-        measurements = self.readData()
+        #measurements = self.readData()
+        measurements = self.readBinary()
         print(measurements)
         coords = []
         x = []
