@@ -5,6 +5,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class MapGUI:
     # Initialization
     def __init__(self, master):
@@ -27,50 +28,75 @@ class MapGUI:
 
     # Retrieve distance-angle pairs from a text file
     def readData(self):
-        try:
-          with open("coordinates.txt") as textFile:
-            lines = [line.split() for line in textFile]
-            # Values are read in as strings, so we convert them to ints
-            for i in lines:
-              i[0] = int(i[0])
-              i[1] = int(i[1])
-            print(lines)
-            return lines
+        coords = []
+        with open("./binarycoords/coords.bin", "rb") as f:
+          try:
+            while True:
+              # Read in the bits according to the LIDAR response structure
+              quality = f.read(6)
+              inverseStart = f.read(1)
+              start = f.read(1)
+              angle_first = f.read(7)
+              checkbit = f.read(1)
+              angle_second = f.read(8)
+              distance = f.read(16)
 
-        except IOError:
-          print("Error reading file!")        
+              # Append the angle_q6 bits
+              angle = (b"".join([angle_first, angle_second]))
+
+              # Turn binary into decimal
+              # 'Actual heading = angle_q6/64.0 Degree'
+              angle = (int(angle, 2) / 64.0)
+              # 'Actual Distance = distance_q2/4.0 mm'
+              distance = (int(distance, 2) / 4.0)/100
+                    
+              print(f'''Angle: {angle} \n
+                      Distance: {distance}''')
+
+              coord = [angle, distance]
+              coords.append(coord)
+
+          except:
+              print('Done Reading')
+        print(coords)
+        return coords
+   
 
     def readBinary(self):
       coords = []
       # For all files...
-      for file in glob.glob("./binarycoords/*.bin"):
-        with open(file, "rb") as f:
-          # Read in the bits according to the LIDAR response structure
-          quality = f.read(6)
-          inverseStart = f.read(1)
-          start = f.read(1)
-          angle_first = f.read(7)
-          checkbit = f.read(1)
-          angle_second = f.read(8)
-          distance = f.read(16)
+      with open("./binarycoords/coords.bin", "rb") as f:
+          try:
+            while True:
+              # Read in the bits according to the LIDAR response structure
+              quality = f.read(6)
+              inverseStart = f.read(1)
+              start = f.read(1)
+              angle_first = f.read(7)
+              checkbit = f.read(1)
+              angle_second = f.read(8)
+              distance = f.read(16)
 
-          # Append the angle_q6 bits
-          angle = (b"".join([angle_first, angle_second]))
+              # Append the angle_q6 bits
+              angle = (b"".join([angle_first, angle_second]))
 
-          # Turn binary into decimal
-          # 'Actual heading = angle_q6/64.0 Degree'
-          angle = (int(angle, 2) / 64.0)
-          # 'Actual Distance = distance_q2/4.0 mm'
-          distance = (int(distance, 2) / 4.0)/100
-          
-          print(f'''{f} Angle: {angle} \n
-                  Distance: {distance}''')
+              # Turn binary into decimal
+              # 'Actual heading = angle_q6/64.0 Degree'
+              angle = (int(angle, 2) / 64.0)
+              # 'Actual Distance = distance_q2/4.0 mm'
+              distance = (int(distance, 2) / 4.0)/100
+                    
+              print(f'''Angle: {angle} \n
+                      Distance: {distance}''')
 
-          coord = [angle, distance]
-          coords.append(coord)
-      print(coords)
-      return coords
+              coord = [angle, distance]
+              coords.append(coord)
 
+              print(coords)
+              return coords
+
+          except:
+              print('Done Reading')
           
           
 
