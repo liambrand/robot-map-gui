@@ -19,9 +19,6 @@ class MapGUI:
 
         self.read_text_button = Button(master, text="Read Data", command = self.readData)
         self.read_text_button.pack()
-        
-        self.read_binary_button = Button(master, text="Read Binary", command = self.readBinary)
-        self.read_binary_button.pack()
 
         self.close_button = Button(master, text="Close", command = master.quit)
         self.close_button.pack()
@@ -32,64 +29,24 @@ class MapGUI:
         with open("./readings.txt", "rt") as f:
           for line in f:
             try:
-              currentline = line.split(" ")
+              currentline = line.split()
               for reading in currentline:
                 reading = line.split(",")
-                print(f'''Angle: {reading[0]} \n
-                      Distance: {reading[0]}''')
+                #print(f'''Angle: {reading[0]} \t
+                #      Distance: {reading[1]}\n''')
 
-                #coord = [angle, distance]
-                #coords.append(coord)
+                coord = [reading[0], reading[1]]
+                coords.append(coord)
 
             except:
                 print('Error encountered while reading file')
-        #print(coords)
+        print(f'''{coords[0][1]}''')
         return coords
-   
-
-    def readBinary(self):
-      coords = []
-      # For all files...
-      with open("./binarycoords/coords.bin", "rb") as f:
-          try:
-            while True:
-              # Read in the bits according to the LIDAR response structure
-              quality = f.read(6)
-              inverseStart = f.read(1)
-              start = f.read(1)
-              angle_first = f.read(7)
-              checkbit = f.read(1)
-              angle_second = f.read(8)
-              distance = f.read(16)
-
-              # Append the angle_q6 bits
-              angle = (b"".join([angle_first, angle_second]))
-
-              # Turn binary into decimal
-              # 'Actual heading = angle_q6/64.0 Degree'
-              angle = (int(angle, 2) / 64.0)
-              # 'Actual Distance = distance_q2/4.0 mm'
-              distance = (int(distance, 2) / 4.0)/100
-                    
-              print(f'''Angle: {angle} \n
-                      Distance: {distance}''')
-
-              coord = [angle, distance]
-              coords.append(coord)
-
-              #print(coords)
-            return coords
-
-          except:
-              print('Done Reading')
-          
-          
 
     # Draw map on plot
     def showMap(self):
         measurements = self.readData()
-        #measurements = self.readBinary()
-        #print(measurements)
+        print(measurements)
         coords = []
         x = []
         y = []
