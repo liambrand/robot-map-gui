@@ -62,12 +62,12 @@ class MapGUI:
 
     # Convert angles and measurements into a plot coordinate
     def getCoords(self, measurement):
-        x = measurement[1] * math.cos(math.radians(measurement[0]))
+        x = measurement[0] * math.cos(math.radians(measurement[0]))
         y = measurement[1] * math.sin(math.radians(measurement[0]))
         return x, y
 
     def getXCoord(self, measurement):
-        x = measurement[1] * math.cos(math.radians(measurement[0]))
+        x = measurement[0] * math.cos(math.radians(measurement[0]))
         return x
 
     def getYCoord(self, measurement):
