@@ -29,14 +29,10 @@ class MapGUI:
         with open("./readings.txt", "rt") as f:
           for line in f:
             try:
-              currentline = line.split()
-              for reading in currentline:
-                reading = line.split(",")
-                #print(f'''Angle: {reading[0]} \t
-                #      Distance: {reading[1]}\n''')
+              reading = line.split()
 
-                coord = [reading[0], reading[1]]
-                coords.append(coord)
+              coord = [float(reading[0]), float(reading[1])]
+              coords.append(coord)
 
             except:
                 print('Error encountered while reading file')
