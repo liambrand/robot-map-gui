@@ -36,7 +36,6 @@ class MapGUI:
 
             except:
                 print('Error encountered while reading file')
-        print(f'''{coords[0][1]}''')
         return coords
 
     # Draw map on plot
@@ -69,12 +68,6 @@ class MapGUI:
     def getYCoord(self, measurement):
         y = measurement[1] * math.sin(math.radians(measurement[0]))
         return y
-
-    def reverse(self, text):
-        rev_text = ""
-        for char in text:
-          rev_text = char + rev_text
-        return rev_text
 
 
 root = Tk()
