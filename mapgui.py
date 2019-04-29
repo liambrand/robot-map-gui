@@ -1,6 +1,4 @@
 from tkinter import Tk, Label, Button, Canvas
-import bitarray
-import glob
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,7 +39,6 @@ class MapGUI:
     # Draw map on plot
     def showMap(self):
         measurements = self.readData()
-        print(measurements)
         coords = []
         x = []
         y = []
@@ -53,6 +50,7 @@ class MapGUI:
 
         plt.scatter(x, y)
         plt.show()
+        print('Map Generated')
 
 
     # Convert angles and measurements into a plot coordinate
