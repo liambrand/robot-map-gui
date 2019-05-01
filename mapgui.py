@@ -66,7 +66,7 @@ class MapGUI:
         y = measurement[1] * math.sin(math.radians(measurement[0]))
         return y
 
-
+# Begin program
 root = Tk()
 my_gui = MapGUI(root)
 root.mainloop()
